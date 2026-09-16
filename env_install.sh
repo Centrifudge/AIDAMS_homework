@@ -1,9 +1,22 @@
 #!/usr/bin/env bash
 
+# some colors to make the output a bit nicer
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+NC='\033[0m'
+
 # pretty print a message with some breathing room around it
+# you can pass a "success", "warn" or "error" keyword as first arg for color
 pretty_print() {
+    local color="$NC"
+    case "$1" in
+        success) color="$GREEN"; shift ;;
+        warn)    color="$YELLOW"; shift ;;
+        error)   color="$RED"; shift ;;
+    esac
     printf "\n"
-    printf "%s\n" "$1"
+    printf "${color}%s${NC}\n" "$1"
     printf "\n"
 }
 
