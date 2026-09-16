@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 
+# where we keep the log of what the script did
+LOG_FILE="env_install.log"
+
 # some colors to make the output a bit nicer
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 RED='\033[0;31m'
 NC='\033[0m'
+
+# write a timestamped line to the log file
+log() {
+    printf "[%s] %s\n" "$(date '+%Y-%m-%d %H:%M:%S')" "$*" >> "$LOG"
+}
 
 # pretty print a message with some breathing room around it
 # you can pass a "success", "warn" or "error" keyword as first arg for color
@@ -18,6 +26,7 @@ pretty_print() {
     printf "\n"
     printf "${color}%s${NC}\n" "$1"
     printf "\n"
+    log "$*"
 }
 
 # figure out which os we are on so we can pick the right package manager
