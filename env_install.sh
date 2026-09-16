@@ -16,7 +16,7 @@ UNINSTALL=0
 parse_args() {
     while [ "$#" -gt 0 ]; do
         case "$1" in
-            --dry-run)   DRYRUN=1 ;;
+            --dry-run)   DRY_RUN=1 ;;
             --verbose)   VERBOSE=1 ;;
             --quiet)     QUIET=1 ;;
             --uninstall) UNINSTALL=1 ;;
