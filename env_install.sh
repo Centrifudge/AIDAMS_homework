@@ -34,12 +34,23 @@ check_pip() {
     fi
 }
 
+# make sure jupyter notebook is installed, otherwise pull it with pip
+install_jupyter() {
+    if command -v jupyter >/dev/null 2>&1; then
+        pretty_print "jupyter already installed"
+    else
+        pretty_print "installing jupyter notebook via pip"
+        pip3 install jupyter
+    fi
+}
+
 main() {
     detect_os
     pretty_print "detected OS: $OS, package manager: $PM"
     pretty_print "dev environment setup starting"
     check_python
     check_pip
+    install_jupyter
 }
 
 main
