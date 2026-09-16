@@ -10,16 +10,16 @@ pretty_print() {
 # figure out which os we are on so we can pick the right package manager
 detect_os() {
     case "$OSTYPE" in
-        darwin*)    OS="macos";  PM="brew" ;;
-        linux)      OS="linux";  PM="apt" ;;
-        *)          OS="unknown"; PM="unknown" ;;
+        darwin*)     OS="macos";  PM="brew" ;;
+        linux-gnu*)  OS="linux";  PM="apt" ;;
+        *)           OS="unknown"; PM="unknown" ;;
     esac
 }
 
 # check that python3 is around, install it if it is missing
 check_python() {
     if command -v python3 >/dev/null 2>&1; then
-        pretty_print "python3 is installed: $(python --version)"
+        pretty_print "python3 is installed: $(python3 --version)"
     else
         pretty_print "python3 not found, will install it"
     fi
