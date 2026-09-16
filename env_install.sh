@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# strict mode: bail on any error, unset var or failing pipe
+set -euo pipefail
+
 # where we keep the log of what the script did
 LOG_FILE="env_install.log"
 
