@@ -41,9 +41,9 @@ install_python() {
 # check that python3 is around, install it if it is missing
 check_python() {
     if command -v python3 >/dev/null 2>&1; then
-        pretty_print "python3 is installed: $(python3 --version)"
+        pretty_print success "python3 is installed: $(python3 --version)"
     else
-        pretty_print "python3 not found, installing it"
+        pretty_print warn "python3 not found, installing it"
         install_python
     fi
 }
@@ -51,9 +51,9 @@ check_python() {
 # verify that pip (python's package manager) is there too
 check_pip() {
     if command -v pip3 >/dev/null 2>&1; then
-        pretty_print "pip is available: $(pip3 --version)"
+        pretty_print success "pip is available: $(pip3 --version)"
     else
-        pretty_print "pip not found, bootstrapping it"
+        pretty_print warn "pip not found, bootstrapping it"
         python3 -m ensurepip
     fi
 }
@@ -61,9 +61,9 @@ check_pip() {
 # make sure jupyter notebook is installed, otherwise pull it with pip
 install_jupyter() {
     if command -v jupyter >/dev/null 2>&1; then
-        pretty_print "jupyter already installed"
+        pretty_print success "jupyter already installed"
     else
-        pretty_print "installing jupyter notebook via pip"
+        pretty_print warn "installing jupyter notebook via pip"
         pip3 install jupyter
     fi
 }
