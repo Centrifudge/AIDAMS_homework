@@ -25,11 +25,21 @@ check_python() {
     fi
 }
 
+# verify that pip (python's package manager) is there too
+check_pip() {
+    if command -v pip3 >/dev/null 2>&1; then
+        pretty_print "pip is available: $(pip3 --version)"
+    else
+        pretty_print "pip not found, will install it"
+    fi
+}
+
 main() {
     detect_os
     pretty_print "detected OS: $OS, package manager: $PM"
     pretty_print "dev environment setup starting"
     check_python
+    check_pip
 }
 
 main
