@@ -14,7 +14,7 @@ NC='\033[0m'
 
 # write a timestamped line to the log file
 log() {
-    printf "[%s] %s\n" "$(date '+%Y-%m-%d %H:%M:%S')" "$*" >> "$LOG"
+    printf "[%s] %s\n" "$(date '+%Y-%m-%d %H:%M:%S')" "$*" >> "$LOG_FILE"
 }
 
 # pretty print a message with some breathing room around it
