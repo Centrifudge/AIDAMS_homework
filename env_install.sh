@@ -118,9 +118,25 @@ mac_health_check() {
     fi
 }
 
+# reverse what the script did (handy for testing over and over)
+uninstall() {
+    pretty_print "removing installed tools"
+    if [ "$DRY_RUN" -eq 1 ]; then
+        printf "(dry run) would uninstall jupyter and remove the log file\n"
+        return
+    fi
+    pip3 uninstall -y jupyter
+    rm -f "$LOG_FILE"
+    pretty_print success "uninstall complete"
+}
+
 main() {
     parse_args "$@"
     detect_os
+    if [ "$UNINSTALL" -eq 1 ]; then
+        uninstall
+        return
+    fi
     if [ "$VERBOSE" -eq 1 ]; then
         printf "(verbose) OSTYPE is %s\n" "$OSTYPE"
     fi
