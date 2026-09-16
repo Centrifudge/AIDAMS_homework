@@ -16,12 +16,22 @@ detect_os() {
     esac
 }
 
+# install python3 with the right package manager for the detected os
+install_python() {
+    case "$OS" in
+        macos)  brew install python3 ;;
+        linux)  sudo apt-get update && sudo apt-get install -y python3 python3-pip ;;
+        *)      printf "sorry, cannot auto install python on $OS\n" ;;
+    esac
+}
+
 # check that python3 is around, install it if it is missing
 check_python() {
     if command -v python3 >/dev/null 2>&1; then
         pretty_print "python3 is installed: $(python3 --version)"
     else
-        pretty_print "python3 not found, will install it"
+        pretty_print "python3 not found, installing it"
+        install_python
     fi
 }
 
@@ -30,7 +40,8 @@ check_pip() {
     if command -v pip3 >/dev/null 2>&1; then
         pretty_print "pip is available: $(pip3 --version)"
     else
-        pretty_print "pip not found, will install it"
+        pretty_print "pip not found, bootstrapping it"
+        python3 -m ensurepip
     fi
 }
 
