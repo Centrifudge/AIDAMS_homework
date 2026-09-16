@@ -44,6 +44,14 @@ install_jupyter() {
     fi
 }
 
+# on macos run brew doctor to catch any package manager issues
+mac_health_check() {
+    if [ "$OS" = "macos" ]; then
+        pretty_print "running brew doctor"
+        brew doctor
+    fi
+}
+
 main() {
     detect_os
     pretty_print "detected OS: $OS, package manager: $PM"
@@ -51,6 +59,7 @@ main() {
     check_python
     check_pip
     install_jupyter
+    mac_health_check
 }
 
 main
