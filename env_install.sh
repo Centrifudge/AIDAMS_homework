@@ -6,6 +6,26 @@ set -euo pipefail
 # where we keep the log of what the script did
 LOG_FILE="env_install.log"
 
+# options that can be toggled with command line flags
+DRY_RUN=0
+VERBOSE=0
+QUIET=0
+UNINSTALL=0
+
+# parse the command line flags
+parse_args() {
+    while [ "$#" -gt 0 ]; do
+        case "$1" in
+            --dry-run)   DRYRUN=1 ;;
+            --verbose)   VERBOSE=1 ;;
+            --quiet)     QUIET=1 ;;
+            --uninstall) UNINSTALL=1 ;;
+            *) printf "unknown option: %s\n" "$1"; exit 1 ;;
+        esac
+        shift
+    done
+}
+
 # some colors to make the output a bit nicer
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -27,7 +47,9 @@ pretty_print() {
         error)   color="$RED"; shift ;;
     esac
     printf "\n"
-    printf "${color}%s${NC}\n" "$1"
+    if [ "$QUIET" -eq 0 ]; then
+        printf "${color}%s${NC}\n" "$1"
+    fi
     printf "\n"
     log "$*"
 }
@@ -43,6 +65,10 @@ detect_os() {
 
 # install python3 with the right package manager for the detected os
 install_python() {
+    if [ "$DRY_RUN" -eq 1 ]; then
+        printf "(dry run) would install python3 via %s\n" "$PM"
+        return
+    fi
     case "$OS" in
         macos)  brew install python3 ;;
         linux)  sudo apt-get update && sudo apt-get install -y python3 python3-pip ;;
@@ -76,7 +102,11 @@ install_jupyter() {
         pretty_print success "jupyter already installed"
     else
         pretty_print warn "installing jupyter notebook via pip"
-        pip3 install jupyter
+        if [ "$DRY_RUN" -eq 1 ]; then
+            printf "(dry run) would pip install jupyter\n"
+        else
+            pip3 install jupyter
+        fi
     fi
 }
 
@@ -89,13 +119,18 @@ mac_health_check() {
 }
 
 main() {
+    parse_args "$@"
     detect_os
+    if [ "$VERBOSE" -eq 1 ]; then
+        printf "(verbose) OSTYPE is %s\n" "$OSTYPE"
+    fi
     pretty_print "detected OS: $OS, package manager: $PM"
     pretty_print "dev environment setup starting"
     check_python
     check_pip
     install_jupyter
     mac_health_check
+    pretty_print success "all done"
 }
 
-main
+main "$@"
